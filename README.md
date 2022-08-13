@@ -31,3 +31,7 @@ DECIDE WINNER
 -- end of pure part --
 
 END GAME WITH IO
+
+detail of function function on Main.hs comments
+
+
