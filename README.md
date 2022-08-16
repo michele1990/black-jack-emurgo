@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # black-jack
 Project for Cardano Developer Course of EMURGO
 
@@ -66,4 +66,4 @@ END GAME WITH IO
 detail of function function on Main.hs comments
 
 
->>>>>>> 31148799418658fe0ff589b01c44362972b3bc39
+
