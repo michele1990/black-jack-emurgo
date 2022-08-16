@@ -190,39 +190,51 @@ valToInt c --card
     |val c == King  = 10
     |val c == Ace   = 1
 
+--CALCULATE THE TOTAL VALUE OF AN HAND
+-- TAKING INTO ACCOUNT ACES VALUE (1 OR 11)
 
-total :: [PlayingCards] -> Int --calculate the total of cards in a hand
+total :: [PlayingCards] -> Int 
 total d = totalValue (moveAces [valToInt x | x <- d] 0 (acesCounter [valToInt x | x <- d] 0)) 0
 
 -- totalValue (   [cardlist] Intaccumulator   ) traerse a list and sum *** decide if ace is 1 or 11 calling decideace
     --          moveaces ( [Intlist] Intaccumulator Intnumofaces)
 
-moveAces :: [Int] -> Int -> Int -> [Int] --move aces to end of hand (recursion doesn't work perfectly yet)
-moveAces v w x --list of card vals, pointing index, number of aces
+
+-- LIST OV VALUE ->  INDEX (wasn't able to do this with recursion in all step, used index) -> NUMBER OF ACES -> LIST OF VALUE WITH ACES PUT AT THE END
+moveAces :: [Int] -> Int -> Int -> [Int] --move aces to end of hand 
+moveAces v w x --LIST OF CARD VAL, POINTING INDEX, NUMBER OF ACES
     |(w == ((length v) - x))        = v
     |((v!!w == 1) || (v!!w == 11)) = moveAces ((take w v) ++ (drop (w + 1) v) ++ [v!!w]) w x
     |((v!!w /= 1) || (v!!w == 11)) = moveAces v (w + 1) x
 
-totalValue :: [Int] -> Int -> Int --calculate the total of cards in a hand
-totalValue v t --list of card vals, total counter
+-- LIST OF VALUE MODIFIED WITH ACES AT THE END -> ACCUMULATOR ->  VALUE OF THE HAND
+totalValue :: [Int] -> Int -> Int 
+totalValue v t --LIST OF CARD VAL, TOTAL COUNTER
     |(length v == 0)                  = 0
     |(length v == 1) && (head v == 1) = decideAce t
     |(length v == 1) && (head v /= 1) = t + head v
     |otherwise                        = totalValue (tail v) (t + head v)
  
-decideAce :: Int -> Int --determines whether ace should be 1 or 11
-decideAce t --total
+-- DETERMINES WHETER AN ACE SHOULD BE 1 OR 11 
+decideAce :: Int -> Int 
+decideAce t --TOTAL
     |t >= 11 = t + 1
     |t < 11  = t + 11
 
-acesCounter :: [Int] -> Int -> Int --counts 1s and 11s in a list
-acesCounter v w --list of card vals, aces counter
+-- LIST OV VALUE -> ACCUMULATOR -> OUTPUT OF NUMBER OF ACES
+acesCounter :: [Int] -> Int -> Int 
+acesCounter v w 
     |(take 1 v) == []                        = w
     |(take 1 v) == [1] || (take 1 v) == [11] = acesCounter (drop 1 v) (w + 1)
     |(take 1 v) /= [1] || (take 1 v) == [11] = acesCounter (drop 1 v) w
 
 
-endgame :: String -> [PlayingCards] -> [PlayingCards] -> IO ()  -- explore comparison between dealer and player Hans to determine who wins
+
+
+
+
+-- EXPLORE COMPARISON BETWEEN DELER AND PLAYER HANDS TO DETERMINE WHO WINS
+endgame :: String -> [PlayingCards] -> [PlayingCards] -> IO ()  
 endgame c disDHand disPHand = do
     putStrLn ("Dealer's Hand: " ++ show [(val x,su x) | x <- disDHand])
     putStrLn ("Your Hand: " ++ show [(val x,su x) | x <- disPHand])
